@@ -55,7 +55,7 @@ class BudgetApp:
 
     def add_money_spent(self) -> int:
         """Total Amount of Money Spent"""
-        # Call function to get list of amount 
+        # Call function to get list of amount
         amount_list = self.handle_input()
         total_spendings = sum(amount_list)
         return total_spendings
