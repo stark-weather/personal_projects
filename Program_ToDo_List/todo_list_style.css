@@ -1,0 +1,14 @@
+* {
+    background-color: #fff;
+    margin: auto;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#head {
+    font-style: italic;
+    font-size: 55px;
+}
+
+#context {
+    font-weight: 150;
+}

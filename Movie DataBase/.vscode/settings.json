@@ -1,0 +1,19 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "xprotocol",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 33060,
+            "driver": "MySQL",
+            "name": "Local_MySQL",
+            "database": "movie_watchlist",
+            "username": "root",
+            "password": "k#x#TuB#gF7j%K",
+            "connectionTimeout": 30
+        }
+    ]
+}
