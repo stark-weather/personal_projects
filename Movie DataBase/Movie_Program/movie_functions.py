@@ -1,8 +1,9 @@
 """Editing File"""
-import requests
 import json
+import pymysql
 import string
-from api_fetch_copy import call_to_api
+import pandas as pd
+from api_fetch import call_to_api
 
 def find_movie(search_movie):
     """
@@ -110,7 +111,7 @@ def user_selection(search_movie):
     while not stopper:
         # Ask user to select a movie
         select_a_movie = input(f"Select a movie (e.g. 1): ")
-        if select_a_movie.lower() == 'done':
+        if select_a_movie.strip().lower() == 'done':
             stopper = True
         else:
             try:
@@ -121,6 +122,7 @@ def user_selection(search_movie):
                     if selected_movie == movie_index:
                         final_selected_movie = list_of_movies_searched[movie_index]
                         database_watchlist.append(final_selected_movie)
+                connect_to_database()
             except ValueError as value_error:
                 print("Invalid input. Enter a number to select a movie")
                 print(f"{value_error} has occurred.")
@@ -155,3 +157,39 @@ def write_to_json_file(search_movie):
     # Write to a JSON file 
     with open("get_movie.json", 'w') as write_to_json:
         json.dump(read_data, write_to_json, indent=4)
+    print("Movie has been added to the watchlist.")
+
+def view_watchlist():
+    """
+    Function allow user to view the movie watchlist
+    """
+    data = read_json_file()
+    # Turns the list of dictionaries into a dataframe
+    watchlist_table = pd.DataFrame(data)
+    
+    print(watchlist_table)
+
+def connect_to_database():
+    data = read_json_file()
+    # Connect to database 
+    db_connection = pymysql.connect(host="localhost",
+                                   port=3306,
+                                   user="root",
+                                   password="k#x#TuB#gF7j%K",
+                                   database="movie_watchlist")
+    cursor = db_connection.cursor()
+    
+    cursor.execute("SELECT * FROM watchlist;")
+    results = cursor.fetchall()
+
+    for movie in data:
+        sql = "INSERT INTO watchlist (Original_Title, Movie_ID, Release_Date, Original_Language) VALUES (%s, %s, %s, %s)"
+        values = (
+            movie["original_title"],
+            movie["id"],
+            movie["release_date"].split("T")[0],
+            movie["original_language"]
+        )
+        cursor.execute(sql, values)  
+
+    db_connection.commit()
